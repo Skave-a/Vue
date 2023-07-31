@@ -1,15 +1,9 @@
 <template>
   <form @submit.prevent>
     Create post:
-    <input
-      v-model="post.title"
-      class="form-control"
-      type="text"
-      placeholder="title"
-    />
-    <input
+    <vueInput v-focus v-model="post.title" type="text" placeholder="Title" />
+    <vueInput
       v-model="post.description"
-      class="form-control"
       type="text"
       placeholder="description"
     />
@@ -34,14 +28,6 @@ export default {
     };
   },
   methods: {
-    inputTitle(event: Event) {
-      const target = event.target as HTMLInputElement;
-      this.post.title = target.value;
-    },
-    inputDescription(event: Event) {
-      const target = event.target as HTMLInputElement;
-      this.post.description = target.value;
-    },
     createPost() {
       this.$emit("create", this.post);
       this.post = {
