@@ -13,20 +13,17 @@
       type="text"
       placeholder="description"
     />
-    <Button
+    <vue-button
       class="btn"
       style="align-self: flex-end; margin-top: 15px"
       @click="createPost"
-      >Add post</Button
+      >Add post</vue-button
     >
   </form>
 </template>
 
 <script lang="ts">
-import Button from "./UI/Button.vue";
-
 export default {
-  components: { Button },
   data() {
     return {
       post: {

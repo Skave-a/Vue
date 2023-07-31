@@ -5,19 +5,15 @@
       <div><strong>Description: </strong>{{ post.description }}</div>
     </div>
     <div class="postBtns">
-      <Button>Remove</Button>
+      <vue-button>Remove</vue-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Post } from "./types";
-import Button from "./UI/Button.vue";
 
 export default {
-  components: {
-    Button,
-  },
   props: {
     post: {
       type: Object as () => Post,
