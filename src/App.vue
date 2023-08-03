@@ -1,12 +1,12 @@
 <template>
   <div class="app">
     <h1>Posts</h1>
-    <vue-button @click="fetchPosts">fetch</vue-button>
     <vue-button @click="showDialog" style="margin: 15px 0">Add Post</vue-button>
-    <vue-dialog v-model:show="dialogVisible"
-      ><post-form @create="addPost"
-    /></vue-dialog>
-    <post-list :posts="posts" @remove="removePost" />
+    <vue-dialog v-model:show="dialogVisible">
+      <post-form @create="addPost" />
+    </vue-dialog>
+    <post-list v-if="!isPostsLoading" :posts="posts" @remove="removePost" />
+    <h2 v-else>Loading...</h2>
   </div>
 </template>
 
@@ -30,6 +30,7 @@ export default defineComponent({
     return {
       posts: [] as Post[],
       dialogVisible: false,
+      isPostsLoading: false,
     };
   },
   methods: {
@@ -45,14 +46,20 @@ export default defineComponent({
     },
     async fetchPosts() {
       try {
+        this.isPostsLoading = true;
         const res = await axios.get(
           "https://jsonplaceholder.typicode.com/posts?_limit=10"
         );
         this.posts = res.data;
       } catch (e) {
         console.log(e);
+      } finally {
+        this.isPostsLoading = false;
       }
     },
+  },
+  mounted() {
+    this.fetchPosts();
   },
 });
 </script>
