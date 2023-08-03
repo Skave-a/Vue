@@ -2,7 +2,7 @@
   <div class="post">
     <div>
       <div><strong>Title: </strong>{{ post.title }}</div>
-      <div><strong>Description: </strong>{{ post.description }}</div>
+      <div><strong>Description: </strong>{{ post.body }}</div>
     </div>
     <div class="postBtns">
       <vue-button @click="$emit('remove', post)">Remove</vue-button>
