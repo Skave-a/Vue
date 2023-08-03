@@ -5,7 +5,7 @@
       <div><strong>Description: </strong>{{ post.description }}</div>
     </div>
     <div class="postBtns">
-      <vue-button>Remove</vue-button>
+      <vue-button @click="$emit('remove', post)">Remove</vue-button>
     </div>
   </div>
 </template>
