@@ -15,6 +15,17 @@
       @remove="removePost"
     />
     <h2 v-else>Loading...</h2>
+    <div class="page__wrapper">
+      <div
+        v-for="pageNum in totalPages"
+        :key="pageNum"
+        class="page"
+        :class="{ 'curent-page': pageNum === page }"
+        @click="page = pageNum"
+      >
+        {{ pageNum }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -41,6 +52,9 @@ export default defineComponent({
       isPostsLoading: false,
       selectedSort: "",
       searchQuery: "",
+      page: 1,
+      limit: 10,
+      totalPages: 0,
       sortOptions: [
         { name: "По возрастанию", value: "title" },
         { name: "По описанию", value: "body" },
@@ -63,8 +77,15 @@ export default defineComponent({
       try {
         this.isPostsLoading = true;
         const res = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          }
         );
+        this.totalPages = Math.ceil(res.headers["x-total-count"] / this.limit);
         this.posts = res.data;
       } catch (e) {
         console.log(e);
@@ -72,6 +93,10 @@ export default defineComponent({
         this.isPostsLoading = false;
       }
     },
+    // changePage(page: number) {
+    //   this.page = page;
+    //   this.fetchPosts();
+    // },
   },
   mounted() {
     this.fetchPosts();
@@ -97,6 +122,11 @@ export default defineComponent({
       );
     },
   },
+  watch: {
+    page() {
+      this.fetchPosts();
+    },
+  },
 });
 </script>
 
@@ -113,5 +143,17 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   margin: 15px 0;
+}
+.page__wrapper {
+  display: flex;
+  margin-top: 15px;
+  gap: 10px;
+}
+.page {
+  border: 1px solid teal;
+  padding: 10px;
+}
+.curent-page {
+  border: 4px solid teal;
 }
 </style>
