@@ -8,7 +8,11 @@
     <vue-dialog v-model:show="dialogVisible">
       <post-form @create="addPost" />
     </vue-dialog>
-    <post-list v-if="!isPostsLoading" :posts="posts" @remove="removePost" />
+    <post-list
+      v-if="!isPostsLoading"
+      :posts="sortedPosts"
+      @remove="removePost"
+    />
     <h2 v-else>Loading...</h2>
   </div>
 </template>
@@ -29,7 +33,7 @@ export default defineComponent({
     VueDialog,
     VueButton,
   },
-  data() {
+  data: function () {
     return {
       posts: [] as Post[],
       dialogVisible: false,
@@ -69,6 +73,20 @@ export default defineComponent({
   },
   mounted() {
     this.fetchPosts();
+  },
+  computed: {
+    sortedPosts(): Post[] {
+      const newValue = this.selectedSort;
+      return [...this.posts].sort((post1, post2) => {
+        const postF = post1[newValue];
+        const postS = post2[newValue];
+        if (typeof postF === "string" && typeof postS === "string") {
+          return postF?.localeCompare(postS);
+        } else {
+          return post1.id - post2.id;
+        }
+      });
+    },
   },
 });
 </script>

@@ -17,9 +17,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, DirectiveBinding } from "vue";
+
+const focusDirective = {
+  mounted(el: HTMLElement) {
+    el.focus();
+  },
+  updated(el: HTMLElement, binding: DirectiveBinding) {
+    if (binding.value) {
+      el.focus();
+    }
+  },
+};
 
 export default defineComponent({
+  directives: {
+    focus: focusDirective,
+  },
   data() {
     return {
       post: {
@@ -37,6 +51,14 @@ export default defineComponent({
         title: "",
         description: "",
       };
+    },
+  },
+  watch: {
+    post: {
+      handler(newValue) {
+        console.log(newValue);
+      },
+      deep: true,
     },
   },
 });
