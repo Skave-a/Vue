@@ -1,6 +1,7 @@
 <template>
   <div class="app">
     <h1>Posts</h1>
+    <vue-input v-model="searchQuery" placeholder="Search" />
     <div class="add__btns">
       <vue-button @click="showDialog">Add Post</vue-button>
       <vue-select v-model="selectedSort" :options="sortOptions" />
@@ -10,7 +11,7 @@
     </vue-dialog>
     <post-list
       v-if="!isPostsLoading"
-      :posts="sortedPosts"
+      :posts="sortedAndSearchedPosts"
       @remove="removePost"
     />
     <h2 v-else>Loading...</h2>
@@ -39,6 +40,7 @@ export default defineComponent({
       dialogVisible: false,
       isPostsLoading: false,
       selectedSort: "",
+      searchQuery: "",
       sortOptions: [
         { name: "По возрастанию", value: "title" },
         { name: "По описанию", value: "body" },
@@ -86,6 +88,13 @@ export default defineComponent({
           return post1.id - post2.id;
         }
       });
+    },
+    sortedAndSearchedPosts(): Post[] {
+      return this.sortedPosts.filter((post) =>
+        post.title
+          .toLocaleLowerCase()
+          .includes(this.searchQuery.toLocaleLowerCase())
+      );
     },
   },
 });
