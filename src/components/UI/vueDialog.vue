@@ -7,7 +7,9 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "vue-dialog",
   props: {
     show: {
@@ -20,7 +22,7 @@ export default {
       this.$emit("update:show", false);
     },
   },
-};
+});
 </script>
 
 <style scoped>

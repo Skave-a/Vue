@@ -1,7 +1,10 @@
 <template>
   <div class="app">
     <h1>Posts</h1>
-    <vue-button @click="showDialog" style="margin: 15px 0">Add Post</vue-button>
+    <div class="add__btns">
+      <vue-button @click="showDialog">Add Post</vue-button>
+      <vue-select v-model="selectedSort" :options="sortOptions" />
+    </div>
     <vue-dialog v-model:show="dialogVisible">
       <post-form @create="addPost" />
     </vue-dialog>
@@ -31,6 +34,12 @@ export default defineComponent({
       posts: [] as Post[],
       dialogVisible: false,
       isPostsLoading: false,
+      selectedSort: "",
+      sortOptions: [
+        { name: "По возрастанию", value: "title" },
+        { name: "По описанию", value: "body" },
+        { name: "По id", value: "id" },
+      ],
     };
   },
   methods: {
@@ -72,5 +81,10 @@ export default defineComponent({
 }
 .app {
   padding: 20px;
+}
+.add__btns {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
 }
 </style>

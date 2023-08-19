@@ -17,7 +17,9 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   data() {
     return {
       post: {
@@ -37,7 +39,7 @@ export default {
       };
     },
   },
-};
+});
 </script>
 
 <style scoped>
