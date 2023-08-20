@@ -15,17 +15,11 @@
       @remove="removePost"
     />
     <h2 v-else>Loading...</h2>
-    <div class="page__wrapper">
-      <div
-        v-for="pageNum in totalPages"
-        :key="pageNum"
-        class="page"
-        :class="{ 'curent-page': pageNum === page }"
-        @click="page = pageNum"
-      >
-        {{ pageNum }}
-      </div>
-    </div>
+    <post-pagination
+      :totalPages="totalPages"
+      :page="page"
+      @update:page="changePage"
+    />
   </div>
 </template>
 
@@ -34,16 +28,16 @@ import { defineComponent } from "vue";
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
 import { Post } from "./components/types";
-import VueDialog from "./components/UI/vueDialog.vue";
-import VueButton from "./components/UI/vueButton.vue";
+import PostPagination from "./components/PostPagination.vue";
 import axios from "axios";
 
 export default defineComponent({
   components: {
     PostList,
     PostForm,
-    VueDialog,
-    VueButton,
+    // VueDialog,
+    // VueButton,
+    PostPagination,
   },
   data: function () {
     return {
@@ -93,10 +87,9 @@ export default defineComponent({
         this.isPostsLoading = false;
       }
     },
-    // changePage(page: number) {
-    //   this.page = page;
-    //   this.fetchPosts();
-    // },
+    changePage(newPage: number) {
+      this.page = newPage;
+    },
   },
   mounted() {
     this.fetchPosts();
