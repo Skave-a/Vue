@@ -15,11 +15,12 @@
       @remove="removePost"
     />
     <h2 v-else>Loading...</h2>
-    <post-pagination
+    <div class="observer" ref="observer"></div>
+    <!-- <post-pagination
       :totalPages="totalPages"
       :page="page"
       @update:page="changePage"
-    />
+    /> -->
   </div>
 </template>
 
@@ -28,7 +29,7 @@ import { defineComponent } from "vue";
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
 import { Post } from "./components/types";
-import PostPagination from "./components/PostPagination.vue";
+// import PostPagination from "./components/PostPagination.vue";
 import axios from "axios";
 
 export default defineComponent({
@@ -37,7 +38,7 @@ export default defineComponent({
     PostForm,
     // VueDialog,
     // VueButton,
-    PostPagination,
+    // PostPagination,
   },
   data: function () {
     return {
@@ -87,12 +88,43 @@ export default defineComponent({
         this.isPostsLoading = false;
       }
     },
-    changePage(newPage: number) {
-      this.page = newPage;
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+        const res = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          }
+        );
+        this.totalPages = Math.ceil(res.headers["x-total-count"] / this.limit);
+        this.posts = [...this.posts, ...res.data];
+      } catch (e) {
+        console.log(e);
+      }
     },
+    // changePage(newPage: number) {
+    //   this.page = newPage;
+    // },
   },
   mounted() {
     this.fetchPosts();
+    console.log(this.$refs.observer);
+    const options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+    const callback = (entries: IntersectionObserverEntry[]) => {
+      console.log("observer", observer);
+      if (entries[0].isIntersecting && this.page < this.totalPages) {
+        this.loadMorePosts();
+      }
+    };
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer as Element);
   },
   computed: {
     sortedPosts(): Post[] {
@@ -115,11 +147,11 @@ export default defineComponent({
       );
     },
   },
-  watch: {
-    page() {
-      this.fetchPosts();
-    },
-  },
+  // watch: {
+  //   page() {
+  //     this.fetchPosts();
+  //   },
+  // },
 });
 </script>
 
@@ -148,5 +180,9 @@ export default defineComponent({
 }
 .curent-page {
   border: 4px solid teal;
+}
+.observer {
+  height: 30px;
+  background: green;
 }
 </style>
