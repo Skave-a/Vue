@@ -1,18 +1,20 @@
 <template>
   <div class="app">
+    <vue-navbar />
     <router-view> </router-view>
   </div>
 </template>
 
 <script lang="ts">
-// import router from "./router/router";
-
+import vueNavbar from "./components/vueNavbar.vue";
 export default {
-  // components: { router }
+  components: {
+    "vue-navbar": vueNavbar,
+  },
 };
 </script>
 
-<style scoped>
+<style>
 * {
   margin: 0;
   padding: 0;
