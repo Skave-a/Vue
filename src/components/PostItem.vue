@@ -6,6 +6,7 @@
       <div><strong>Description: </strong>{{ post.body }}</div>
     </div>
     <div class="postBtns">
+      <vue-button @click="$router.push(`/posts/${post.id}`)">Open</vue-button>
       <vue-button @click="$emit('remove', post)">Remove</vue-button>
     </div>
   </div>
@@ -32,5 +33,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.postBtns {
+  display: flex;
+  gap: 10px;
 }
 </style>

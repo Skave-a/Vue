@@ -7,9 +7,5 @@
 </template>
 
 <script lang="ts">
-export default {
-  // Описание компонента
-};
+export default {};
 </script>
-
-<style scoped></style>
